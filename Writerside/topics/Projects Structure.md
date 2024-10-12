@@ -2,12 +2,14 @@
 
 ## Overview
 
-**Virtuosa** is a command-line tool and Python package designed for single-cell RNA-sequencing (scRNA-seq) data analysis. It provides an end-to-end workflow, including preprocessing, analysis, and visualization of single-cell datasets. The project is structured to facilitate easy navigation, extensibility, and collaboration. The main functionalities are distributed across four core components: 'Butler', 'Servant', 'Painter', and 'Musician'.
+**Virtuosa** is a command-line tool and Python package designed for single-cell RNA-sequencing (scRNA-seq) data analysis. It provides an end-to-end workflow, including preprocessing, analysis, and visualization of single-cell datasets. The project is structured to facilitate easy navigation, extensibility, and collaboration. The main functionalities are distributed across six core components: 'Butler', 'Servant', 'Painter', 'Musician', 'Counselor', and 'Alchemist'.
 
-- **Servant**: Responsible for direct interactions with `adata`, recording all operations performed on `adata`, as well as handling internal property operations. The 'Servant' records everything that happens to `adata` and is also responsible for saving data.
+- **Servant**: Responsible for direct interactions with `adata`, recording all operations performed on `adata`, handling internal property operations, and maintaining version histories. The 'Servant' records everything that happens to `adata` and is also responsible for saving data.
 - **Butler**: Handles basic quality control, dimensionality reduction, visualization, and other preprocessing tasks prior to cell annotation.
 - **Painter**: Manages all visualization functions, including color and palette assignment, and plotting.
 - **Musician**: Responsible for downstream analysis workflows, such as intercellular communication.
+- **Counselor**: This role surrounds the Lady (the user), providing quality assessments of the data at various stages. The Counselor focuses on metrics calculation, quality checks, and offering suggestions for improvements to maintain analysis standards.
+- **Alchemist**: Responsible for advanced data transformations, including data augmentation, imputation, and other preprocessing enhancements that go beyond basic data handling. The Alchemist is tasked with ensuring data consistency and enhancing the dataset quality for subsequent analysis.
 
 ## Project Structure
 
@@ -32,13 +34,19 @@ virtuosa/
 │       │   └── butler.py            # Preprocessing functions (e.g., QC, dimensionality reduction)
 │       ├── servant/                 # Servant module
 │       │   ├── __init__.py          # Servant module initialization file
-│       │   └── servant.py           # Data handling, recording, and saving
+│       │   └── servant.py           # Data handling, recording, versioning, and saving
 │       ├── painter/                 # Painter module
 │       │   ├── __init__.py          # Painter module initialization file
 │       │   └── painter.py           # Visualization functions (e.g., plotting, color management)
 │       ├── musician/                # Musician module
 │       │   ├── __init__.py          # Musician module initialization file
 │       │   └── musician.py          # Downstream analysis functions (e.g., intercellular communication)
+│       ├── counselor/               # Counselor module
+│       │   ├── __init__.py          # Counselor module initialization file
+│       │   └── counselor.py         # Quality assessment and suggestions
+│       ├── alchemist/               # Alchemist module
+│       │   ├── __init__.py          # Alchemist module initialization file
+│       │   └── alchemist.py         # Advanced data transformations (recipes)
 │       ├── utils/                   # Utility functions module
 │       │   ├── __init__.py          # Helper functions
 │       │   └── helpers.py           # Common utility functions
@@ -51,6 +59,8 @@ virtuosa/
 │   ├── test_servant.py              # Servant module unit tests
 │   ├── test_painter.py              # Painter module unit tests
 │   ├── test_musician.py             # Musician module unit tests
+│   ├── test_counselor.py            # Counselor module unit tests
+│   ├── test_alchemist.py            # Alchemist module unit tests
 │   └── conftest.py                  # Pytest configuration and shared fixtures
 ├── .gitignore                       # Git ignore file
 ├── pyproject.toml                   # PEP 517/518 compliant project configuration
@@ -75,8 +85,8 @@ virtuosa/
 
 ### examples/
 
-- **example\_analysis.py**: A script demonstrating how to use the Virtuosa package for single-cell analysis.
-- **example\_data.h5ad**: Sample single-cell RNA-seq data for demonstration purposes.
+- **example_analysis.py**: A script demonstrating how to use the Virtuosa package for single-cell analysis.
+- **example_data.h5ad**: Sample single-cell RNA-seq data for demonstration purposes.
 
 ### src/
 
@@ -86,15 +96,21 @@ virtuosa/
     - **butler/**: Butler module for basic quality control, dimensionality reduction, and visualization.
         - **__init__.py**: Initializes the butler module.
         - **butler.py**: Implements preprocessing functions.
-    - **servant/**: Servant module responsible for interacting with `adata`, recording operations, and saving.
+    - **servant/**: Servant module responsible for interacting with `adata`, recording operations, maintaining version histories, and saving.
         - **__init__.py**: Initializes the servant module.
-        - **servant.py**: Handles data operations, including recording and saving actions.
+        - **servant.py**: Handles data operations, including recording, versioning, and saving actions.
     - **painter/**: Painter module for creating plots and managing colors and palettes.
         - **__init__.py**: Initializes the painter module.
         - **painter.py**: Implements visualization functions.
     - **musician/**: Musician module responsible for downstream analyses such as intercellular communication.
         - **__init__.py**: Initializes the musician module.
         - **musician.py**: Contains functions for advanced downstream analysis.
+    - **counselor/**: Counselor module for quality assessment and analysis suggestions.
+        - **__init__.py**: Initializes the counselor module.
+        - **counselor.py**: Provides quality checks and suggestions for improving analysis steps.
+    - **alchemist/**: Alchemist module for advanced data transformations and guiding analysis.
+        - **__init__.py**: Initializes the alchemist module.
+        - **alchemist.py**: Offers advanced data transformations and workflows for common analysis tasks.
     - **utils/**: Utility functions that support various operations within the package.
         - **__init__.py**: Initializes the utilities module.
         - **helpers.py**: Contains common helper functions.
@@ -104,11 +120,13 @@ virtuosa/
 
 ### tests/
 
-- **test\_cli.py**: Contains tests for the CLI functionality, ensuring command-line commands work as intended.
-- **test\_butler.py**: Unit tests for the butler module.
-- **test\_servant.py**: Unit tests for the servant module.
-- **test\_painter.py**: Unit tests for the painter module.
-- **test\_musician.py**: Unit tests for the musician module.
+- **test_cli.py**: Contains tests for the CLI functionality, ensuring command-line commands work as intended.
+- **test_butler.py**: Unit tests for the butler module.
+- **test_servant.py**: Unit tests for the servant module.
+- **test_painter.py**: Unit tests for the painter module.
+- **test_musician.py**: Unit tests for the musician module.
+- **test_counselor.py**: Unit tests for the counselor module.
+- **test_alchemist.py**: Unit tests for the alchemist module.
 - **conftest.py**: Configuration file for pytest, defining shared fixtures and test configurations.
 
 ### .gitignore
@@ -164,6 +182,8 @@ The design philosophy of the **Virtuosa** package centers on interacting with `a
    she-summon servant --save-path output_data.h5ad
    she-summon painter --plot umap
    she-summon musician --analyze cell_communication
+   she-summon counselor --quality-check
+   she-summon alchemist --recipe basic_workflow
    ```
 
 3. **Running Tests**:
